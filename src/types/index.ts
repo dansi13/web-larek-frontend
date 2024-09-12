@@ -21,6 +21,26 @@ export interface IProductList {
     items: IProductItem[]
 }
 
+export interface IProductItemData {
+    items: IProductItem[]
+    preview: string | null;
+    addProduct: (product: IProductItem) => void;
+    getProduct: (productId: string) => IProductItem | null;
+}
+
+export interface IUserData {
+    setPaymentMethod: (method: TPaymentMethod) => void;
+    setUserInfo: (info: TUserInfo) => void;
+    clearInfo: () => void;
+}
+
+export interface IBasketData {
+    addProduct: (product: IProductItem) => void;
+    getProducts: () => IProductItem[];
+    removeProduct: (productId: string) => void;
+    clearBasket: () => void;
+}
+
 export type TProductList = IProductList;
 
 export type TPaymentMethod = Pick<IUser, 'payment' | 'address'>;
