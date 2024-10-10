@@ -1,31 +1,25 @@
+//  
+
 export interface IProductItem {
     id: string;
     description : string;
     image : string;
     title : string;
     category: string;
-    price : number;
+    price : number | null;
 }
 
 export interface IUser {
-    payment : string;
+    payment : TPaymentMethod;
     email : string;
     phone : string;
     address : string;
-    total: number;
+}
+
+export interface ICart {
+    find(arg0: (item: { id: IProductItem; }) => boolean): unknown;
     items : IProductItem[];
-}
-
-export interface IProductList {
-    total: number;
-    items: IProductItem[]
-}
-
-export interface IProductItemData {
-    items: IProductItem[]
-    preview: string | null;
-    addProduct: (product: IProductItem) => void;
-    getProduct: (productId: string) => IProductItem | null;
+    total : number;
 }
 
 export interface IUserData {
@@ -34,18 +28,29 @@ export interface IUserData {
     clearInfo: () => void;
 }
 
-export interface IBasketData {
+export interface ICartData {
     addProduct: (product: IProductItem) => void;
     getProducts: () => IProductItem[];
     removeProduct: (productId: string) => void;
-    clearBasket: () => void;
+    clearCart: () => void;
 }
 
-export type TProductList = IProductList;
+export type TPaymentMethod = 'cash' | 'card';
 
-export type TPaymentMethod = Pick<IUser, 'payment' | 'address'>;
+//export type TOrderInfo = Pick<IUser, 'payment' | 'address'>;
+export interface TOrderInfo {
+    payment: TPaymentMethod;
+    address: string;
+}
 
 export type TUserInfo = Pick<IUser, 'email' | 'phone'>;
 
-export type TOrder = Pick<IUser, 'total'>;
+export type TOrder = Pick<ICart, 'total'>;
 
+export type ApiPostMethods = 'POST' | 'PUT' | 'DELETE';
+
+export interface IApi {
+    baseUrl: string;
+    get<T>(uri: string): Promise<T>;
+    post<T>(uri: string, data: object, method?: ApiPostMethods): Promise<T>;
+}
