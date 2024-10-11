@@ -22,7 +22,7 @@ export class Cart extends View<ICartView> {
         this._button = this.container.querySelector('.basket__button');
 
         this._button.addEventListener('click', () => {
-            this.events.emit('cart:submit');
+            this.events.emit('user:open');
         });
         this.items = [];
     }

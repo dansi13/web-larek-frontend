@@ -17,7 +17,7 @@ export class AppData {
         email: '',
         phone: '',
         address: '',
-        payment: 'card'
+        payment: ''
     }
     formErrors: Partial<Record<keyof IUser, string>> = {};
     items: any;
@@ -113,7 +113,7 @@ export class AppData {
 			email: '',
 			phone: '',
 			address: '',
-			payment: 'card',
+			payment: '',
 		};
 	}
 

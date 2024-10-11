@@ -10,7 +10,7 @@ export interface IProductItem {
 }
 
 export interface IUser {
-    payment : TPaymentMethod;
+    payment : string;
     email : string;
     phone : string;
     address : string;

@@ -34,7 +34,7 @@ export class OrderInfo extends Form<TOrderInfo> {
         });
 
         this._submitButton.addEventListener('click', () => {
-            this.events.emit('cart:submit');
+            this.events.emit('user:submit');
         })
     }
     

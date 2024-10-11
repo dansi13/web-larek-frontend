@@ -99,26 +99,15 @@ events.on('cart:change', () => {
 	cart.items = items;
 });
 
-
 events.on('cart:open', () => {
 	modal.render({ content: cart.render() });
 })
-
-events.on('cart:submit', () => {
-	if (appData.user.address !== '' ) {
-		modal.render({ content: userInfo.render() });
-	} else if (appData.cart.items.length) {
-		modal.render({ content: orderInfo.render() });
-	} else {
-		modal.render({ content: orderSuccess.render() });
-	}
-});
 
 events.on('user:open', () => {
 	appData.clearOrder();
 	modal.render({
 		content: orderInfo.render({
-			payment: 'card',
+			payment: '',
 			adress: '',
 			valid: false,
 			errors: [],
@@ -149,7 +138,6 @@ events.on(
 events.on(
 	/^contacts\..*:change$/,
 	(data: { field: keyof TUserInfo; value: string }) => {
-		// appData.setOrderField(data.field, data.value);
 		appData.setUserField(data.field, data.value);
 		appData.validateContactsForm();
 	}
