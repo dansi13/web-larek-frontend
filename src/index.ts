@@ -8,7 +8,7 @@ import { EventEmitter } from './components/base/events';
 import { Cart } from './components/Cart';
 import { Modal } from './components/common/Modal';
 import { OrderSuccess } from './components/OrderSuccess';
-import { IProductItem, ICart, IApi, TOrder, IUser, TPaymentMethod, TUserInfo } from './types';
+import { IProductItem, ICart, IApi, TOrder, IUser, TPaymentMethod, TUserInfo, TOrderInfo } from './types';
 import { API_URL, CDN_URL, settings } from './utils/constants';
 import { cloneTemplate, ensureElement } from './utils/utils';
 import { UserInfo } from './components/UserInfo';
@@ -49,10 +49,7 @@ api.getProducts().then(appData.setProducts.bind(appData)).catch(console.error);
 
 events.on('modal:open', () => {page.locked = true;});
 
-events.on('modal:close', () => {page.locked = false;
-	appData.clearOrder();
-	orderInfo.ClearAllAndClose();
-	userInfo.ClearAllAndClose();});
+events.on('modal:close', () => {page.locked = false;});
 
 events.on(`card:select`, (product: IProductItem) => {
     appData.setPreview(product);
@@ -104,7 +101,6 @@ events.on('cart:open', () => {
 })
 
 events.on('user:open', () => {
-	appData.clearOrder();
 	modal.render({
 		content: orderInfo.render({
 			payment: '',
@@ -116,7 +112,6 @@ events.on('user:open', () => {
 });
 
 events.on('user:submit', () => {
-	appData.clearOrder();
 	modal.render({
 		content: userInfo.render({
 			email: '',
@@ -129,7 +124,7 @@ events.on('user:submit', () => {
 
 events.on(
 	/^order\..*:change$/,
-	(data: { field: keyof TPaymentMethod; value: string }) => {
+	(data: { field: keyof TOrderInfo; value: string }) => {
 		appData.setOrderField(data.field, data.value);
 		appData.validateOrderForm();
 	}
@@ -161,6 +156,8 @@ events.on('contactsFormErrors:change', (error: Partial<IUser>) => {
 });
 
 events.on('contacts:submit', () => {
+
+	
 	api
 		.createOrder(appData.getOrder())
 		.then((data) => {

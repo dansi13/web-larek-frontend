@@ -1,4 +1,4 @@
-import { IProductItem, ICart, TOrder, IUser, TPaymentMethod, IApi, TUserInfo } from "../types";
+import { IProductItem, ICart, TOrder, IUser, TPaymentMethod, IApi, TUserInfo, IOrder } from "../types";
 import { IEvents } from "./base/events";
 import { EMAIL_REGEXP, TEL_REGEXP } from "../utils/constants";
 import { Api, ApiListResponse } from "./base/api";
@@ -6,7 +6,7 @@ import { Api, ApiListResponse } from "./base/api";
 export interface IAppApi {
     getProductList: () => Promise<IProductItem[]>;
 	getProduct: (id: string) => Promise<IProductItem>;
-	createOrder: (order: TOrder) => Promise<TOrder>;
+	createOrder: (order: IOrder) => Promise<TOrder>;
 }
 export class AppApi extends Api implements IAppApi {
     cdn: string;
@@ -34,7 +34,9 @@ export class AppApi extends Api implements IAppApi {
 		}));
     }
 
-    createOrder(order: object): Promise<TOrder> {
+    createOrder(order: IOrder): Promise<TOrder> {
+
+        
         return this.post(`/order`, order).then((data: TOrder) => data);
     }
 }

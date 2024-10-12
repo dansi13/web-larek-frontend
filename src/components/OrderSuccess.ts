@@ -3,7 +3,7 @@ import { IEvents } from "./base/events";
 import { ensureElement } from "../utils/utils";
 
 interface ISuccess {
-    total: number
+    total: number;
 }
 
 interface ISuccessActions {

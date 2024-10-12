@@ -77,6 +77,15 @@ export interface ICart {
 }
 ```
 
+Оформление заказа
+
+```
+export interface TOrder {
+    id: string;
+    total: number;
+}
+```
+
 Список товаров 
 
 ```
@@ -94,7 +103,7 @@ export type TProductList = IProductList;
 Данные пользователя, в форме способа оплаты 
 
 ```
-export type TPaymentMethod = Pick<IUser, 'payment' | 'address'>;
+export type TPaymentMethod = 'cash' | 'card';
 ```
 
 Основные данные пользователя 
@@ -102,13 +111,6 @@ export type TPaymentMethod = Pick<IUser, 'payment' | 'address'>;
 ```
 export type TUserInfo = Pick<IUser, 'email' | 'phone'>;
 ```
-
-Данные, используемые при завершении заказа
-
-```
-export type TOrder = Pick<IUser, 'total'>;
-```
-
 
 ## Архитектура приложения 
 

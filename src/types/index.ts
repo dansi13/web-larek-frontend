@@ -14,12 +14,22 @@ export interface IUser {
     email : string;
     phone : string;
     address : string;
+    // total: number;
+    // items: string[];
 }
 
 export interface ICart {
-    find(arg0: (item: { id: IProductItem; }) => boolean): unknown;
     items : IProductItem[];
     total : number;
+}
+
+export interface IOrder {
+    payment: string,
+    email: string,
+    phone: string,
+    address: string,
+    total: number,
+    items: string[]
 }
 
 export interface IUserData {
@@ -37,7 +47,6 @@ export interface ICartData {
 
 export type TPaymentMethod = 'cash' | 'card';
 
-//export type TOrderInfo = Pick<IUser, 'payment' | 'address'>;
 export interface TOrderInfo {
     payment: TPaymentMethod;
     address: string;
@@ -45,7 +54,10 @@ export interface TOrderInfo {
 
 export type TUserInfo = Pick<IUser, 'email' | 'phone'>;
 
-export type TOrder = Pick<ICart, 'total'>;
+export interface TOrder {
+    id: string;
+    total: number;
+}
 
 export type ApiPostMethods = 'POST' | 'PUT' | 'DELETE';
 

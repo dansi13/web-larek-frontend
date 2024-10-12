@@ -1,4 +1,4 @@
-import { IProductItem, ICart, TOrder, IUser, TPaymentMethod, IApi, TUserInfo } from "../types";
+import { IProductItem, ICart, TOrder, IUser, TPaymentMethod, IApi, TUserInfo, TOrderInfo, IOrder } from "../types";
 import { IEvents } from "./base/events";
 import { EMAIL_REGEXP, TEL_REGEXP } from "../utils/constants";
 import { Api, ApiListResponse } from "./base/api";
@@ -9,19 +9,17 @@ export class AppData {
     cart: ICart = {
         items: [],
         total: 0,
-        find: function (arg0: (item: { id: IProductItem; }) => boolean): unknown {
-            throw new Error("Function not implemented.");
-        }
     };
-    user: IUser = {
+    order: IUser = {
         email: '',
         phone: '',
         address: '',
-        payment: ''
+        payment: '',
+        // total: 0,
+        // items: [],
     }
     formErrors: Partial<Record<keyof IUser, string>> = {};
     items: any;
-    order: any;
 
     constructor(protected events: IEvents) {}
 
@@ -54,40 +52,39 @@ export class AppData {
     clearCart() {
         this.cart.items = [];
 		this.cart.total = 0;
-		this.events.emit('cart:change');
+        this.events.emit('cart:change');
 	}
 
     setPaymentMethod(method: TPaymentMethod) {
-        this.user.payment = method;
-        this.events.emit('user:change');
+        this.order.payment = method;
     }
 
-    setOrderField(field: keyof TPaymentMethod, value: string) {
-        if (field as string === 'payment') {
+    setOrderField(field: keyof TOrderInfo, value: string) {
+        if (field === 'payment') {
             this.setPaymentMethod(value as TPaymentMethod);
         } else {
-            this.user[field as keyof IUser] = value as TPaymentMethod;
+            this.order.address = value;
         }
     }
 
     setUserField(field: string, value: string) {
             if (field === 'email') {
-                this.user.email = value;
+                this.order.email = value;
             } else if (field === 'phone') {
-                this.user.phone = value;
+                this.order.phone = value;
             }
 	}
 
     validateContactsForm() {
 		const errors: typeof this.formErrors = {};
-		if (!this.user.email) {
+		if (!this.order.email) {
 			errors.email = 'Необходимо указать email';
-		} else if (!EMAIL_REGEXP.test(this.user.email)) {
+		} else if (!EMAIL_REGEXP.test(this.order.email)) {
 			errors.email = 'Неправильно указан email';
 		}
-		if (!this.user.phone) {
+		if (!this.order.phone) {
 			errors.phone = 'Необходимо указать телефон';
-		} else if (!TEL_REGEXP.test(this.user.phone)) {
+		} else if (!TEL_REGEXP.test(this.order.phone)) {
 			errors.phone = 'Неправильно указан телефон';
 		}
 		this.formErrors = errors;
@@ -97,10 +94,10 @@ export class AppData {
 
     validateOrderForm() {
         const errors: typeof this.formErrors = {};
-        if (!this.user.address) {
+        if (!this.order.address) {
             errors.address = 'Необходимо указать адрес';
         }
-        if (!this.user.payment) {
+        if (!this.order.payment) {
             errors.payment = 'Необходимо указать способ оплаты';
         }
         this.formErrors = errors;
@@ -109,20 +106,24 @@ export class AppData {
     }
 
 	clearOrder() {
-		this.user = {
+		this.order = {
 			email: '',
 			phone: '',
 			address: '',
 			payment: '',
 		};
+        this.cart = {
+            total: 0,
+            items: []
+        }
 	}
 
-    getOrder() {
+    getOrder(): IOrder {
         return {
-            payment: this.user.payment,
-            address: this.user.address,
-            email: this.user.email,
-            phone: this.user.phone,
+            payment: this.order.payment,
+            address: this.order.address,
+            email: this.order.email,
+            phone: this.order.phone,
             total: this.cart.total,
             items: this.cart.items.map(item => item.id)
         }
